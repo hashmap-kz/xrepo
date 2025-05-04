@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	storage2 "github.com/hashmap-kz/xrepo/pkg/storage"
+	"github.com/hashmap-kz/xrepo/pkg/clients/s3x"
+	"github.com/hashmap-kz/xrepo/pkg/clients/sftpx"
 
-	"github.com/hashmap-kz/xrepo/pkg/s3x"
-	"github.com/hashmap-kz/xrepo/pkg/sftpx"
+	storage2 "github.com/hashmap-kz/xrepo/pkg/storage"
 
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/pkg/sftp"

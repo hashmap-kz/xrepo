@@ -9,10 +9,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hashmap-kz/xrepo/pkg/storage"
+	"github.com/hashmap-kz/xrepo/pkg/clients/s3x"
+	"github.com/hashmap-kz/xrepo/pkg/clients/sftpx"
 
-	"github.com/hashmap-kz/xrepo/pkg/s3x"
-	"github.com/hashmap-kz/xrepo/pkg/sftpx"
+	"github.com/hashmap-kz/xrepo/pkg/storage"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

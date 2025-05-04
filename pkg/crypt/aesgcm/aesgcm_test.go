@@ -9,8 +9,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/hashmap-kz/xrepo/pkg/common"
-
 	"github.com/stretchr/testify/assert"
 )
 
@@ -146,9 +144,9 @@ func TestChunkedGCMCrypto_EncryptDecryptMultipleRandomFiles(t *testing.T) {
 		// Optionally write a debug copy if the test fails
 		if !assert.Equal(t, original, decrypted) {
 			//nolint:errcheck
-			_ = os.WriteFile(filepath.Join(tmpDir, "fail-original.bin"), original, common.FilePerm)
+			_ = os.WriteFile(filepath.Join(tmpDir, "fail-original.bin"), original, 0o600)
 			//nolint:errcheck
-			_ = os.WriteFile(filepath.Join(tmpDir, "fail-decrypted.bin"), decrypted, common.FilePerm)
+			_ = os.WriteFile(filepath.Join(tmpDir, "fail-decrypted.bin"), decrypted, 0o600)
 			t.Fatalf("mismatch in file %d", i)
 		}
 	}

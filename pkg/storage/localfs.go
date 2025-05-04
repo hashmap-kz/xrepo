@@ -18,7 +18,7 @@ type localStorage struct {
 var _ Storage = &localStorage{}
 
 func NewLocal(baseDir string) (Storage, error) {
-	if err := os.MkdirAll(baseDir, common.DirPerm); err != nil {
+	if err := os.MkdirAll(baseDir, 0o750); err != nil {
 		return nil, err
 	}
 	return &localStorage{baseDir: baseDir}, nil
@@ -30,7 +30,7 @@ func (l *localStorage) fullPath(path string) string {
 
 func (l *localStorage) PutObject(_ context.Context, path string, r io.Reader) error {
 	full := l.fullPath(path)
-	if err := os.MkdirAll(filepath.Dir(full), common.DirPerm); err != nil {
+	if err := os.MkdirAll(filepath.Dir(full), 0o750); err != nil {
 		return err
 	}
 	f, err := os.Create(full)

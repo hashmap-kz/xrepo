@@ -115,10 +115,10 @@ func TestLocalStorage_ListTopLevelDirs(t *testing.T) {
 	s, err := NewLocal(dir)
 	assert.NoError(t, err)
 
-	err = os.MkdirAll(filepath.Join(dir, "x/sub"), common.DirPerm)
+	err = os.MkdirAll(filepath.Join(dir, "x/sub"), 0o750)
 	assert.NoError(t, err)
 
-	err = os.MkdirAll(filepath.Join(dir, "y"), common.DirPerm)
+	err = os.MkdirAll(filepath.Join(dir, "y"), 0o750)
 	assert.NoError(t, err)
 
 	err = os.WriteFile(filepath.Join(dir, "file.txt"), []byte("ignore"), 0o600)
