@@ -3,14 +3,7 @@ package storage
 import (
 	"context"
 	"io"
-	"time"
 )
-
-type ObjectInfo struct {
-	Path    string
-	Size    int64
-	ModTime time.Time
-}
 
 type Storage interface {
 	PutObject(ctx context.Context, path string, r io.Reader) error
