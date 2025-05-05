@@ -16,7 +16,7 @@ import (
 
 func TestLocalStorage_PutAndReadObject(t *testing.T) {
 	dir := t.TempDir()
-	s, err := NewLocal(dir)
+	s, err := NewLocal(&LocalStorageOpts{BaseDir: dir})
 	assert.NoError(t, err)
 
 	content := []byte("hello, pgwal!")
@@ -36,7 +36,7 @@ func TestLocalStorage_PutAndReadObject(t *testing.T) {
 
 func TestLocalStorage_Exists(t *testing.T) {
 	dir := t.TempDir()
-	s, err := NewLocal(dir)
+	s, err := NewLocal(&LocalStorageOpts{BaseDir: dir})
 	assert.NoError(t, err)
 
 	path := "exists.txt"
@@ -54,7 +54,7 @@ func TestLocalStorage_Exists(t *testing.T) {
 
 func TestLocalStorage_SHA256(t *testing.T) {
 	dir := t.TempDir()
-	s, err := NewLocal(dir)
+	s, err := NewLocal(&LocalStorageOpts{BaseDir: dir})
 	assert.NoError(t, err)
 
 	content := []byte("hash me")
@@ -72,7 +72,7 @@ func TestLocalStorage_SHA256(t *testing.T) {
 
 func TestLocalStorage_ListAll_1(t *testing.T) {
 	dir := t.TempDir()
-	s, err := NewLocal(dir)
+	s, err := NewLocal(&LocalStorageOpts{BaseDir: dir})
 	assert.NoError(t, err)
 
 	err = s.PutObject(context.Background(), "a/file1.txt", bytes.NewReader([]byte("1")))
@@ -112,7 +112,7 @@ func TestLocalStorage_ListAll_2(t *testing.T) {
 
 func TestLocalStorage_ListTopLevelDirs(t *testing.T) {
 	dir := t.TempDir()
-	s, err := NewLocal(dir)
+	s, err := NewLocal(&LocalStorageOpts{BaseDir: dir})
 	assert.NoError(t, err)
 
 	err = os.MkdirAll(filepath.Join(dir, "x/sub"), 0o750)

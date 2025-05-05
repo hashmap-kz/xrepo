@@ -39,6 +39,9 @@ type Config struct {
 	RepoEncryptor      RepoEncryptor `json:"REPO_ENCRYPTOR"` // aes-256-gcm
 	RepoEncryptionPass string        `json:"REPO_ENCRYPTION_PASS"`
 
+	// Local Storage config
+	RepoStorageLocalFsyncOnWrite bool `json:"REPO_STORAGE_LOCAL_FSYNC_ON_WRITE"`
+
 	// SFTP Storage config
 	RepoStorageSFTPHost                 string `json:"REPO_STORAGE_SFTP_HOST"`
 	RepoStorageSFTPPort                 int    `json:"REPO_STORAGE_SFTP_PORT"`

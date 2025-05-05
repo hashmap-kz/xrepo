@@ -8,20 +8,28 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/hashmap-kz/xrepo/pkg/fsync"
+
 	"github.com/hashmap-kz/xrepo/pkg/common"
 )
 
 type localStorage struct {
-	baseDir string
+	baseDir      string
+	fsyncOnWrite bool
+}
+
+type LocalStorageOpts struct {
+	BaseDir      string
+	FsyncOnWrite bool
 }
 
 var _ Storage = &localStorage{}
 
-func NewLocal(baseDir string) (Storage, error) {
-	if err := os.MkdirAll(baseDir, 0o750); err != nil {
+func NewLocal(o *LocalStorageOpts) (Storage, error) {
+	if err := os.MkdirAll(o.BaseDir, 0o750); err != nil {
 		return nil, err
 	}
-	return &localStorage{baseDir: baseDir}, nil
+	return &localStorage{baseDir: o.BaseDir, fsyncOnWrite: o.FsyncOnWrite}, nil
 }
 
 func (l *localStorage) fullPath(path string) string {
@@ -29,21 +37,31 @@ func (l *localStorage) fullPath(path string) string {
 }
 
 func (l *localStorage) PutObject(_ context.Context, path string, r io.Reader) error {
-	full := l.fullPath(path)
-	if err := os.MkdirAll(filepath.Dir(full), 0o750); err != nil {
+	fullPath := l.fullPath(path)
+	if err := os.MkdirAll(filepath.Dir(fullPath), 0o750); err != nil {
 		return err
 	}
-	f, err := os.Create(full)
+	f, err := os.Create(fullPath)
 	if err != nil {
 		return err
 	}
-	defer f.Close()
 
-	_, err = io.Copy(f, r)
-	if err != nil {
+	// Copy contents
+	if _, err := io.Copy(f, r); err != nil {
+		_ = f.Close() // ignore close error if we already have a copy error
 		return err
 	}
-	return f.Sync()
+
+	// Fsync if needed
+	if l.fsyncOnWrite {
+		if err := fsync.Fsync(f); err != nil {
+			_ = f.Close() // same here: best-effort
+			return err
+		}
+	}
+
+	// Now close, and return any close error
+	return f.Close()
 }
 
 func (l *localStorage) ReadObject(_ context.Context, path string) (io.ReadCloser, error) {

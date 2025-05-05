@@ -36,7 +36,7 @@ func TestRepo_PutAndGet_GzipV1(t *testing.T) {
 	tmp := t.TempDir()
 
 	// Arrange
-	local, err := storage2.NewLocal(tmp)
+	local, err := storage2.NewLocal(&storage2.LocalStorageOpts{BaseDir: tmp})
 	require.NoError(t, err)
 
 	gzipCompressor := &codec.GzipCompressor{}
@@ -66,7 +66,7 @@ func TestRepo_PutAndGet_GzipV1(t *testing.T) {
 
 func TestRepo_PutAndGet_NoCompression_NoEncryption(t *testing.T) {
 	tmp := t.TempDir()
-	store, err := storage2.NewLocal(tmp)
+	store, err := storage2.NewLocal(&storage2.LocalStorageOpts{BaseDir: tmp})
 	require.NoError(t, err)
 
 	r := NewWriteReader(store, nil, nil)
@@ -92,7 +92,7 @@ func TestRepo_PutAndGet_NoCompression_NoEncryption(t *testing.T) {
 
 func TestRepo_PutAndGet_GzipV2(t *testing.T) {
 	tmp := t.TempDir()
-	store, err := storage2.NewLocal(tmp)
+	store, err := storage2.NewLocal(&storage2.LocalStorageOpts{BaseDir: tmp})
 	require.NoError(t, err)
 
 	r := NewWriteReader(store, &codec.GzipCompressor{}, nil)
@@ -114,7 +114,7 @@ func TestRepo_PutAndGet_GzipV2(t *testing.T) {
 
 func TestRepo_PutAndGet_EncryptionOnly(t *testing.T) {
 	tmp := t.TempDir()
-	store, err := storage2.NewLocal(tmp)
+	store, err := storage2.NewLocal(&storage2.LocalStorageOpts{BaseDir: tmp})
 	require.NoError(t, err)
 
 	crypter := aesgcm.NewChunkedGCMCrypter("secret-key") // assume implementation exists
@@ -138,7 +138,7 @@ func TestRepo_PutAndGet_EncryptionOnly(t *testing.T) {
 
 func TestRepo_PutAndGet_GzipAndEncryption(t *testing.T) {
 	tmp := t.TempDir()
-	store, err := storage2.NewLocal(tmp)
+	store, err := storage2.NewLocal(&storage2.LocalStorageOpts{BaseDir: tmp})
 	require.NoError(t, err)
 
 	crypter := aesgcm.NewChunkedGCMCrypter("combo-key")
@@ -163,7 +163,7 @@ func TestRepo_PutAndGet_GzipAndEncryption(t *testing.T) {
 
 func TestRepo_EmptyFile(t *testing.T) {
 	tmp := t.TempDir()
-	store, err := storage2.NewLocal(tmp)
+	store, err := storage2.NewLocal(&storage2.LocalStorageOpts{BaseDir: tmp})
 	require.NoError(t, err)
 
 	r := NewWriteReader(store, &codec.GzipCompressor{}, nil)
@@ -184,7 +184,7 @@ func TestRepo_EmptyFile(t *testing.T) {
 
 func TestRepo_InvalidCompressorExtension(t *testing.T) {
 	tmp := t.TempDir()
-	store, err := storage2.NewLocal(tmp)
+	store, err := storage2.NewLocal(&storage2.LocalStorageOpts{BaseDir: tmp})
 	require.NoError(t, err)
 
 	// fake compressor without matching decompressor
@@ -216,7 +216,7 @@ func TestRepo_ReadObject_DecompressFails(t *testing.T) {
 
 func TestRepo_BadReaderWrite(t *testing.T) {
 	tmp := t.TempDir()
-	store, err := storage2.NewLocal(tmp)
+	store, err := storage2.NewLocal(&storage2.LocalStorageOpts{BaseDir: tmp})
 	require.NoError(t, err)
 
 	r := NewWriteReader(store, nil, nil)

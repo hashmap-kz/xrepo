@@ -16,8 +16,7 @@ import (
 )
 
 // DecideRepo inits repository with storage/compression/encryption assigned according to configs
-func DecideRepo(dir string) (repo.WriteReader, error) {
-	cfg := config.Cfg()
+func DecideRepo(cfg *config.Config, dir string) (repo.WriteReader, error) {
 	baseDir := filepath.ToSlash(filepath.Join(cfg.RepoPath, dir))
 	compressor, crypter := decideCompressorEncryptor(cfg)
 
@@ -28,11 +27,14 @@ func DecideRepo(dir string) (repo.WriteReader, error) {
 			slog.String("module", "boot"),
 			slog.String("local storage ready with location", filepath.ToSlash(baseDir)),
 		)
-		local, err := storage.NewLocal(baseDir)
+		s, err := storage.NewLocal(&storage.LocalStorageOpts{
+			BaseDir:      baseDir,
+			FsyncOnWrite: cfg.RepoStorageLocalFsyncOnWrite,
+		})
 		if err != nil {
 			return nil, err
 		}
-		return repo.NewWriteReader(local, compressor, crypter), nil
+		return repo.NewWriteReader(s, compressor, crypter), nil
 
 		// sftp
 	case config.RepoTypeSFTP:

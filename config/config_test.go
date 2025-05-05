@@ -16,6 +16,7 @@ var content = []byte(`
   "REPO_COMPRESSOR": "gzip",
   "REPO_ENCRYPTOR": "aes-256-gcm",
   "REPO_ENCRYPTION_PASS": "102030pass5",
+  "REPO_STORAGE_LOCAL_FSYNC_ON_WRITE": true,
   "REPO_STORAGE_SFTP_HOST": "db-server.example.com",
   "REPO_STORAGE_SFTP_PORT": 22,
   "REPO_STORAGE_SFTP_USER": "backupuser",
@@ -28,9 +29,7 @@ var content = []byte(`
   "REPO_STORAGE_S3_BUCKET": "backups",
   "REPO_STORAGE_S3_REGION": "main",
   "REPO_STORAGE_S3_USE_PATH_STYLE": true,
-  "REPO_STORAGE_S3_DISABLE_SSL": true,
-  "LOG_LEVEL": "info",
-  "LOG_DIR": "/var/log/pgbackup"
+  "REPO_STORAGE_S3_DISABLE_SSL": true
 }
 `)
 
@@ -45,6 +44,8 @@ func TestConfigStructureFromBytes(t *testing.T) {
 	assert.Equal(t, "gzip", string(cfg.RepoCompressor))
 	assert.Equal(t, "aes-256-gcm", string(cfg.RepoEncryptor))
 	assert.Equal(t, "102030pass5", cfg.RepoEncryptionPass)
+
+	assert.True(t, cfg.RepoStorageLocalFsyncOnWrite)
 
 	assert.Equal(t, "db-server.example.com", cfg.RepoStorageSFTPHost)
 	assert.Equal(t, 22, cfg.RepoStorageSFTPPort)
@@ -77,6 +78,8 @@ func TestConfigStructureFromFile(t *testing.T) {
 	assert.Equal(t, "gzip", string(cfg.RepoCompressor))
 	assert.Equal(t, "aes-256-gcm", string(cfg.RepoEncryptor))
 	assert.Equal(t, "102030pass5", cfg.RepoEncryptionPass)
+
+	assert.True(t, cfg.RepoStorageLocalFsyncOnWrite)
 
 	assert.Equal(t, "db-server.example.com", cfg.RepoStorageSFTPHost)
 	assert.Equal(t, 22, cfg.RepoStorageSFTPPort)
