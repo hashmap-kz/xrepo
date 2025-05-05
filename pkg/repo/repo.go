@@ -38,7 +38,7 @@ type WriteReader interface {
 
 type repoImpl struct {
 	storage    storage.Storage  // required: e.g. LocalImpl()
-	compressor codec.Compressor // required: gzip (by default), zstd
+	compressor codec.Compressor // optional
 	crypter    crypt.Crypter    // optional
 }
 
