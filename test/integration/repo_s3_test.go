@@ -12,12 +12,12 @@ import (
 	"github.com/hashmap-kz/xrepo/pkg/repo"
 	"github.com/hashmap-kz/xrepo/pkg/storage"
 
-	"github.com/hashmap-kz/xrepo/pkg/crypt/aesgcm"
+	"github.com/hashmap-kz/streamcrypt/pkg/crypt/aesgcm"
 
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/hashmap-kz/xrepo/pkg/codec"
+	"github.com/hashmap-kz/streamcrypt/pkg/codec"
 
 	"github.com/stretchr/testify/require"
 )

@@ -5,12 +5,12 @@ import (
 	"log/slog"
 	"path/filepath"
 
+	"github.com/hashmap-kz/streamcrypt/pkg/codec"
+	"github.com/hashmap-kz/streamcrypt/pkg/crypt"
+	"github.com/hashmap-kz/streamcrypt/pkg/crypt/aesgcm"
 	"github.com/hashmap-kz/xrepo/config"
 	"github.com/hashmap-kz/xrepo/pkg/clients/s3x"
 	"github.com/hashmap-kz/xrepo/pkg/clients/sftpx"
-	"github.com/hashmap-kz/xrepo/pkg/codec"
-	"github.com/hashmap-kz/xrepo/pkg/crypt"
-	"github.com/hashmap-kz/xrepo/pkg/crypt/aesgcm"
 	"github.com/hashmap-kz/xrepo/pkg/repo"
 	"github.com/hashmap-kz/xrepo/pkg/storage"
 )

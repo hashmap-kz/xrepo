@@ -12,12 +12,12 @@ import (
 
 	storage2 "github.com/hashmap-kz/xrepo/pkg/storage"
 
-	"github.com/hashmap-kz/xrepo/pkg/crypt"
-	"github.com/hashmap-kz/xrepo/pkg/crypt/aesgcm"
+	"github.com/hashmap-kz/streamcrypt/pkg/crypt"
+	"github.com/hashmap-kz/streamcrypt/pkg/crypt/aesgcm"
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/hashmap-kz/xrepo/pkg/codec"
+	"github.com/hashmap-kz/streamcrypt/pkg/codec"
 
 	"github.com/stretchr/testify/require"
 )

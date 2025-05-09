@@ -7,12 +7,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/hashmap-kz/xrepo/pkg/ioutils"
-	"github.com/hashmap-kz/xrepo/pkg/pipe"
+	"github.com/hashmap-kz/streamcrypt/pkg/ioutils"
+	"github.com/hashmap-kz/streamcrypt/pkg/pipe"
 	"github.com/hashmap-kz/xrepo/pkg/storage"
 
-	"github.com/hashmap-kz/xrepo/pkg/codec"
-	"github.com/hashmap-kz/xrepo/pkg/crypt"
+	"github.com/hashmap-kz/streamcrypt/pkg/codec"
+	"github.com/hashmap-kz/streamcrypt/pkg/crypt"
 )
 
 type WriteReader interface {
