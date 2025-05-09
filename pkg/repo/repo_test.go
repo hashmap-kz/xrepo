@@ -7,7 +7,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 	"testing"
 
@@ -272,24 +271,8 @@ func TestEncodePath(t *testing.T) {
 	}
 }
 
-func TestKnownExtensions(t *testing.T) {
-	r := &repoImpl{
-		compressor: newMockCompressor(".zst"),
-		crypter:    newMockCrypter(".enc"),
-	}
-
-	got := r.knownExtensions()
-
-	expected := []string{".zst.enc", ".zst", ".enc"}
-	sort.Strings(expected)
-	sort.Strings(got)
-
-	assert.ElementsMatch(t, expected, got)
-}
-
 func TestDecodePath(t *testing.T) {
 	r := &repoImpl{}
-	exts := []string{".zst.enc", ".zst", ".enc"}
 
 	tests := []struct {
 		name     string
@@ -304,7 +287,7 @@ func TestDecodePath(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			decoded := r.decodePath(tt.input, exts)
+			decoded := r.decodePath(tt.input)
 			assert.Equal(t, filepath.ToSlash(tt.expected), decoded)
 		})
 	}

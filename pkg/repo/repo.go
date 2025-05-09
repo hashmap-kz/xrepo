@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"path/filepath"
-	"sort"
 	"strings"
 
 	"github.com/hashmap-kz/xrepo/pkg/ioutils"
@@ -133,9 +132,8 @@ func (repo *repoImpl) ListAll(ctx context.Context, prefix string) ([]string, err
 
 	// trim all possible extensions
 	filtered := make([]string, 0, len(storageObjects))
-	knownExtensions := repo.knownExtensions()
 	for _, elem := range storageObjects {
-		cleaned := repo.decodePath(elem, knownExtensions)
+		cleaned := repo.decodePath(elem)
 		filtered = append(filtered, filepath.ToSlash(cleaned))
 	}
 	return filtered, nil
@@ -160,31 +158,23 @@ func (repo *repoImpl) encodePath(logical string) string {
 }
 
 // decodePath removes known extensions
-func (repo *repoImpl) decodePath(encoded string, knownExtensions []string) string {
-	for _, ext := range knownExtensions {
-		if strings.HasSuffix(encoded, ext) {
-			return strings.TrimSuffix(encoded, ext)
-		}
+func (repo *repoImpl) decodePath(path string) string {
+	ext := extractCompoundExt(path)
+	if ext == "" {
+		return path
 	}
-	return encoded
+	return strings.TrimSuffix(path, ext)
 }
 
-// knownExtensions returns combinations of compression/encryption extensions
-func (repo *repoImpl) knownExtensions() []string {
-	var exts []string
-	if repo.compressor != nil {
-		exts = append(exts, repo.compressor.FileExtension())
+// ExtractCompoundExt returns the extension starting from the first dot,
+// e.g., ".gz.aes", ".tar.gz.aes", or "" if no dot.
+func extractCompoundExt(name string) string {
+	name = filepath.Base(name)
+	i := strings.IndexByte(name, '.')
+	if i < 0 {
+		return "" // no extension
 	}
-	if repo.crypter != nil {
-		exts = append(exts, repo.crypter.FileExtension())
-	}
-	if repo.compressor != nil && repo.crypter != nil {
-		exts = append(exts, repo.compressor.FileExtension()+repo.crypter.FileExtension())
-	}
-	sort.Slice(exts, func(i, j int) bool {
-		return len(exts[i]) > len(exts[j])
-	})
-	return exts
+	return name[i:] // includes the dot
 }
 
 func (repo *repoImpl) GetCompressorName() string {
